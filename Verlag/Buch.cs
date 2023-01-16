@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Verlag
 {
@@ -16,11 +17,17 @@ namespace Verlag
 
         public Buch(string autor, string titel)
         {
-            foreach (char c in nichtErlaubteZeichen)
+            //foreach (char c in nichtErlaubteZeichen)
+            //{
+            //    if (autor.Contains(c)) throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen: " + c);
+            //}
+            if (Regex.IsMatch(autor, @"^[%§#;]+$"))
             {
-                if (autor.Contains(c)) throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen: " + c);
+                throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen.");
             }
+
             if (autor == "" || autor == null) throw new ArgumentException("Autor darf nicht leer sein");
+
             this.autor = autor;
             this.titel = titel;
         }
@@ -31,6 +38,7 @@ namespace Verlag
             {
                 throw new ArgumentOutOfRangeException("Auflage muss > 1 sein.");
             }
+
             this.auflage = auflage;
         }
 
