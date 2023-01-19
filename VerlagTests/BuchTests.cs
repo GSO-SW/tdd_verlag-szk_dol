@@ -124,7 +124,7 @@ namespace VerlagTests
             string autor = "Autor";
             string titel = "Titel";
             int auflage = 1;
-			string iSBN = "123-4567898765";
+			string iSBN = "978-3770436149";
 
 			// Act
 			Buch c = new Buch(autor, titel, auflage, iSBN);
@@ -140,12 +140,13 @@ namespace VerlagTests
 			string autor = "Autor";
 			string titel = "Titel";
 			int auflage = 1;
-			string iSBN = "123-456789876";
+			string iSBN = "978-377043614";
 
             // Act
             Buch d = new Buch(autor, titel, auflage, iSBN);
 
 			// Assert
+			Assert.AreEqual("978-3770436149", d.ISBN);
         }
 	}
 }
