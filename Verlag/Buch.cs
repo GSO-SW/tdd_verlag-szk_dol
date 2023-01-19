@@ -12,6 +12,7 @@ namespace Verlag
         private string autor;
         private string titel;
         private int auflage;
+        private string iSBN;
 
         public Buch(string autor, string titel)
         {
@@ -25,6 +26,11 @@ namespace Verlag
             Auflage = auflage;
         }
 
+        public Buch (string autor, string titel, int auflage, string iSBN): this(autor, titel, auflage)
+        {
+            this.iSBN = iSBN;
+        }
+
 
 
 
@@ -33,9 +39,13 @@ namespace Verlag
             get => autor;
             set
             {
-                if (Regex.IsMatch(value, "[#%§;]|null"))
+                if (Regex.IsMatch(value, @"[#%§;]+") || value == "")
                 {
-                    throw new ArgumentException("Keine Sonderzeichen.");
+                    throw new ArgumentException("Der Autor darf keine Sonderzeichen enthalten.");
+                }
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Der Autor darf nicht NULL sein.");
                 }
                 autor = value;
             }
@@ -58,6 +68,11 @@ namespace Verlag
                 }
                 auflage = value;
             }
+        }
+
+        public string ISBN
+        {
+            get => iSBN;
         }
 
     }
