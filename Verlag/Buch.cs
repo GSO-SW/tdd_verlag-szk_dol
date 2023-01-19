@@ -18,7 +18,7 @@ namespace Verlag
 
         public Buch(string autor, string titel)
         {
-            this.Autor = autor;
+            Autor = autor;
             this.titel = titel;
         }
 
@@ -59,7 +59,7 @@ namespace Verlag
                 //{
                 //    if (value.Contains(c)) throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen: " + c);
                 //}
-                if (Regex.IsMatch(value, @"^[%§#;]+"))
+                if (Regex.IsMatch(value, @"[%§#;]+"))
                 {
                     throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen.");
                 }
