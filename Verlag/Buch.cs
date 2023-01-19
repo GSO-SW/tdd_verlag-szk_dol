@@ -33,21 +33,8 @@ namespace Verlag
         }
 
         public Buch(string autor, string titel, int auflage, string isbn) : this(autor, titel, auflage)
-        {
-            if (isbn.Length == 13)
-            {
-                char[] isbnChars = isbn.Remove(isbn.IndexOf('-'), 1).ToCharArray();
-                int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
-                int pruefZiffer = 0;
-                for (int i = 0; i < isbnZiffern.Length; i++)
-                {
-                    pruefZiffer += isbnZiffern[i] * i + 1;
-                }
-                this.isbn = isbn + $"{pruefZiffer % 13}";
-                return;
-            }
-            
-            this.isbn = isbn;
+        {   
+            ISBN = isbn;
         }
 
         public string Autor
@@ -80,6 +67,54 @@ namespace Verlag
                 this.auflage = value;
             }
         }
-        public string ISBN { get => isbn; }
+        public string ISBN { get => isbn;
+            set
+            {
+
+                if (value.Length == 13)
+                {
+                    char[] isbnChars = value.Remove(value.IndexOf('-'), 1).ToCharArray();
+                    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
+                    int pruefZiffer = 0;
+
+                    for (int i = 0; i < isbnZiffern.Length; i++)
+                    {
+                        if ((i + 1) % 2 == 0)
+                        {
+                            pruefZiffer += isbnZiffern[i] * 3;
+                        }
+                        else
+                        {
+                            pruefZiffer += isbnZiffern[i];
+                        }
+                    }
+                    int ziffer = 10 - (pruefZiffer % 10);
+                    if (ziffer == 10) ziffer = 0;
+                    this.isbn = isbn + $"{ziffer}";
+                    return;
+                }
+                this.isbn = value;
+
+            }
+        }
+
+        public string ISBN10
+        {
+            get
+            {
+                if (isbn.Length == 14)
+                {
+                    char[] isbnChars = isbn.Remove(isbn.IndexOf('-'), 1).ToCharArray();
+                    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
+                    int pruefZiffer = 0;
+                    for (int i = 0; i < isbnZiffern.Length; i++)
+                    {
+                        pruefZiffer += isbnZiffern[i] * i + 1;
+                    }
+                    this.isbn = isbn + $"{pruefZiffer % 13}";
+                    return;
+                }
+            }
+        }
     }
 }
