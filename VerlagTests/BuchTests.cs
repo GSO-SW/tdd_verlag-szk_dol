@@ -148,5 +148,22 @@ namespace VerlagTests
 			// Assert
 			Assert.AreEqual("978-3770436149", d.ISBN);
         }
+
+		[TestMethod]
+		public void ISBN_ISBN13inISBN10Umrechnen()
+		{
+            //Arrange 
+            string autor = "Autor";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-3770436064";
+            Buch d = new Buch(autor, titel, auflage, iSBN);
+
+			// Act
+			//iSBN10 = d.ISBN13In10Umrechnen;
+
+			// Assert
+			//Assert.AreEqual("3770436067", iSBN10);
+        }
 	}
 }

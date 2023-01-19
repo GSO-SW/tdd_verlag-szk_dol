@@ -28,10 +28,8 @@ namespace Verlag
 
         public Buch (string autor, string titel, int auflage, string iSBN): this(autor, titel, auflage)
         {
-            this.iSBN = iSBN;
+            ISBN = iSBN;
         }
-
-
 
 
         public string Autor 
@@ -73,6 +71,39 @@ namespace Verlag
         public string ISBN
         {
             get => iSBN;
+
+            private set 
+            {
+                if (value.Length == 14)
+                {
+                    iSBN = value;
+                    return;
+                }
+                if (value.Length == 13)
+                {
+                    int summe = 0;
+                    int i = 1;
+                    foreach (char x in value)
+                    {
+                        if (x != '-')
+                        {
+                            if (i % 2 == 0)
+                            {
+                                summe += Convert.ToInt32(x) * 3;
+                            }
+                            else
+                            {
+                                summe += Convert.ToInt32(x);
+                            }
+                        i++;
+                        }
+                    }
+                    summe = 10 - (summe % 10);
+                    iSBN = value + Convert.ToString(summe);
+                    return;
+                }
+                throw new ArgumentOutOfRangeException("Die ISBN Nummer muss entweder 12 oder 13 Ziffern lang sein");
+            }
         }
 
     }
