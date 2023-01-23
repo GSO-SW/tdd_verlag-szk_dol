@@ -81,7 +81,7 @@ namespace Verlag
                 }
                 if (value.Length == 13)
                 {
-                    int summe = 0;
+                    double summe = 0;
                     int i = 1;
                     foreach (char x in value)
                     {
@@ -89,17 +89,22 @@ namespace Verlag
                         {
                             if (i % 2 == 0)
                             {
-                                summe += Convert.ToInt32(x) * 3;
+                                summe += Char.GetNumericValue(x) * 3;
                             }
                             else
                             {
-                                summe += Convert.ToInt32(x);
+                                summe += Char.GetNumericValue(x);
                             }
                         i++;
                         }
                     }
-                    summe = 10 - (summe % 10);
-                    iSBN = value + Convert.ToString(summe);
+                    double pruefziffer = 10 - (summe % 10);
+                    if (pruefziffer == 10)
+                    {
+                        pruefziffer = 0;
+                    }
+
+                    iSBN = value + Convert.ToString(pruefziffer);
                     return;
                 }
                 throw new ArgumentOutOfRangeException("Die ISBN Nummer muss entweder 12 oder 13 Ziffern lang sein");
