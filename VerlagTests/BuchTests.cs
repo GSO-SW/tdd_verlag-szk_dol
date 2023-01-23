@@ -160,10 +160,10 @@ namespace VerlagTests
             Buch d = new Buch(autor, titel, auflage, iSBN);
 
 			// Act
-			//iSBN10 = d.ISBN13In10Umrechnen;
+			string iSBN10 = d.ISBN10;
 
 			// Assert
-			//Assert.AreEqual("3770436067", iSBN10);
+			Assert.AreEqual("3770436067", iSBN10);
         }
 	}
 }

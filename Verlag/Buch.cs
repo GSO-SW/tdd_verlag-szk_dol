@@ -110,6 +110,28 @@ namespace Verlag
                 throw new ArgumentOutOfRangeException("Die ISBN Nummer muss entweder 12 oder 13 Ziffern lang sein");
             }
         }
+        public string ISBN10
+        {
+            get
+            {
+                string isbn10 = iSBN.Substring(4,iSBN.Length-5);
+
+                double i = 10;
+                double summe = 0;
+                foreach (char x in isbn10)
+                {
+                    summe += i * Char.GetNumericValue(x);
+                    i--;
+                }
+                double pruefziffer = summe % 11;
+                if (pruefziffer == 10)
+                {
+                    return isbn10 + 'X';
+                }
+
+                return isbn10 + Convert.ToString(pruefziffer);
+            }
+        }
 
     }
 }
