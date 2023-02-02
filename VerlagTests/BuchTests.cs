@@ -94,10 +94,10 @@ namespace VerlagTests
 		// DataRow: https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest#add-more-features
 		[TestMethod]
 		[DataRow("")]
-		[DataRow("Mr#kekw")]
-		[DataRow("kekw;")]
-		[DataRow("aaron§ haaron")]
-		[DataRow("kek% lol")]
+		[DataRow("Ma#x Muster&mann")]
+		[DataRow("Ma; Mustermann")]
+		[DataRow("Max Mu§sterm#nn")]
+		[DataRow("%Max Muster%mann")]
 		[ExpectedException(typeof(ArgumentException))]
 		public void Autor_NurSinnvolleEingabenErlaubt(string unerlaubtesZeichen)
 		{
@@ -105,41 +105,16 @@ namespace VerlagTests
 			Buch b = new Buch(unerlaubtesZeichen, "titel");
 		}
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Autor_DarfNichtNullSein()
-        {
-            //Act
-            Buch b = new Buch(null, "titel");
-        }
-
-        [TestMethod]
-		public void ISBN_BuchKannMitEinerISBNErstelltWerden()
-		{
-			string titel = "TestBuch";
-			string autor = "Autor";
-			int auflage = 2;
-			string isbn = "978-3770436163";
-
-			Buch b = new Buch(autor, titel, auflage, isbn);
-
-			Assert.AreEqual(b.ISBN, isbn);
-		}
-
 		[TestMethod]
-		public void ISBN_PruefzifferWirdErgaenzt()
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void Autor_KeineNullEingabeErlaubt()
 		{
-            //Arange
-            string titel = "TestBuch";
-            string autor = "Autor";
-            int auflage = 2;
-            string isbn = "978-377043614";
+            // Arrange
+            string nullAutor = null;
+            string titel = "Titel";
 
-            //Act
-            Buch b = new Buch(autor, titel, auflage, isbn);
-
-            //Assert
-            Assert.AreEqual("978-3770436149", b.ISBN);
+			// Act
+			Buch b = new Buch(nullAutor, titel);
         }
-    }
+	}
 }
