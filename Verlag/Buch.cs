@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
@@ -11,135 +12,127 @@ namespace Verlag
     {
         private string autor;
         private string titel;
-        private int auflage = 1;
-        private string isbn;
-
-        private char[] nichtErlaubteZeichen = { '#', ';', '§', '%' };
+        private int auflage;
+        private string iSBN;
 
         public Buch(string autor, string titel)
         {
             Autor = autor;
             this.titel = titel;
+            this.auflage = 1;
         }
 
-        public Buch(string autor, string titel, int auflage) :this(autor, titel)
-        {  
-            if (auflage < 1)
-            {
-                throw new ArgumentOutOfRangeException("Auflage muss > 1 sein.");
-            }
-
-            this.auflage = auflage;
-        }
-
-        public Buch(string autor, string titel, int auflage, string isbn) : this(autor, titel, auflage)
-        {   
-            ISBN = isbn;
-        }
-
-        public string Autor
+        public Buch(string autor, string titel, int auflage): this(autor, titel)
         {
-            get => autor; 
+            Auflage = auflage;
+        }
+
+        public Buch (string autor, string titel, int auflage, string iSBN): this(autor, titel, auflage)
+        {
+            ISBN = iSBN;
+        }
+
+
+        public string Autor 
+        { 
+            get => autor;
             set
             {
-                //foreach (char c in nichtErlaubteZeichen)
-                //{
-                //    if (value.Contains(c)) throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen: " + c);
-                //}
-                if (Regex.IsMatch(value, @"[%§#;]+"))
+                if (Regex.IsMatch(value, @"[#%§;]+") || value == "")
                 {
-                    throw new ArgumentException("Ein nicht erlaubtes Zeichen wurde eingetragen.");
+                    throw new ArgumentException("Der Autor darf keine Sonderzeichen enthalten.");
                 }
-
-                if (value == "") throw new ArgumentException("Autor darf nicht leer sein");
-                if (value == null) throw new ArgumentNullException("Es wurde kein Autor angegeben!");
-
-                this.autor = value;
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Der Autor darf nicht NULL sein.");
+                }
+                autor = value;
             }
         }
-        public string Titel { get => titel; }
+
+        public string Titel
+        {
+            get => titel;
+        }
+
         public int Auflage
         {
             get => auflage;
-            set
+
+            set 
             {
-                if (value < 1) throw new ArgumentOutOfRangeException("Auflage muss > 1 sein.");
-                this.auflage = value;
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException("Auflag kann nicht niedriger als 1 sein.");
+                }
+                auflage = value;
             }
         }
+
         public string ISBN
         {
-            get => isbn;
-            set
-            {
-                if (value.Length == 13)
-                {
-                    char[] isbnChars = value.Remove(value.IndexOf('-'), 1).ToCharArray();
-                    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
-                    int pruefZiffer = 0;
+            get => iSBN;
 
-                    for (int i = 0; i < isbnZiffern.Length; i++)
-                    {
-                        if ((i + 1) % 2 == 0)
-                        {
-                            pruefZiffer += isbnZiffern[i] * 3;
-                        }
-                        else
-                        {
-                            pruefZiffer += isbnZiffern[i];
-                        }
-                    }
-                    int ziffer = 10 - (pruefZiffer % 10);
-                    if (ziffer == 10) ziffer = 0;
-                    this.isbn = value + $"{ziffer}";
+            private set 
+            {
+                if (value.Length == 14)
+                {
+                    iSBN = value;
                     return;
                 }
-                this.isbn = value;
+                if (value.Length == 13)
+                {
+                    double summe = 0;
+                    int i = 1;
+                    foreach (char x in value)
+                    {
+                        if (x != '-')
+                        {
+                            if (i % 2 == 0)
+                            {
+                                summe += Char.GetNumericValue(x) * 3;
+                            }
+                            else
+                            {
+                                summe += Char.GetNumericValue(x);
+                            }
+                        i++;
+                        }
+                    }
+                    double pruefziffer = 10 - (summe % 10);
+                    if (pruefziffer == 10)
+                    {
+                        pruefziffer = 0;
+                    }
 
+                    iSBN = value + Convert.ToString(pruefziffer);
+                    return;
+                }
+                throw new ArgumentOutOfRangeException("Die ISBN Nummer muss entweder 12 oder 13 Ziffern lang sein");
             }
         }
-
         public string ISBN10
         {
             get
             {
-                //if (isbn.Length == 14)
-                //{
-                //    char[] isbnChars = isbn.Replace('-', '\0')[..^1].ToCharArray();
-                //    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
-                //    int pruefZiffer = 0;
-                //    for (int i = 0; i < isbnZiffern.Length; i++)
-                //    {
-                //        pruefZiffer += isbnZiffern[i] * i + 1;
-                //    }
-                //    char pz = 'X';
-                //    if (pruefZiffer % 11 == 10)
-                //    {
-                //        pz = 'X';
-                //    } 
-                //    else
-                //    {
-                //        pz = char.Parse((pruefZiffer % 11).ToString());
-                //    }
-                //    return isbn.Substring(isbn.IndexOf('-') + 1)[..^1] + pz;
-                //}
-                //return "";
+                string isbn10 = iSBN.Substring(4,iSBN.Length-5);
 
-                var split = isbn[4..^1].Where(x => char.IsDigit(x)).Select(x => int.Parse(x.ToString())).ToArray();
-
-                for (int i = 0; i < 9;)
+                double i = 1;
+                double summe = 0;
+                foreach (char x in isbn10)
                 {
-                    split[i] *= ++i;
+                    summe += i * Char.GetNumericValue(x);
+                    i++;
+                }
+                double pruefziffer = summe % 11;
+                if (pruefziffer == 10)
+                {
+                    return isbn10 + 'X';
                 }
 
-                int dings = split.Sum() % 11;
-
-                return dings switch
-                {
-                    13 => isbn[4..^1] + 'X',
-                    _ => isbn[4..^1] + dings
-                };
+                return isbn10 + Convert.ToString(pruefziffer);
             }
         }
+
     }
 }

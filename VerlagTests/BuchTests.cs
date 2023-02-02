@@ -94,10 +94,10 @@ namespace VerlagTests
 		// DataRow: https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest#add-more-features
 		[TestMethod]
 		[DataRow("")]
-		[DataRow("Mr#kekw")]
-		[DataRow("kekw;")]
-		[DataRow("aaron§ haaron")]
-		[DataRow("kek% lol")]
+		[DataRow("Ma#x Muster&mann")]
+		[DataRow("Ma; Mustermann")]
+		[DataRow("Max Mu§sterm#nn")]
+		[DataRow("%Max Muster%mann")]
 		[ExpectedException(typeof(ArgumentException))]
 		public void Autor_NurSinnvolleEingabenErlaubt(string unerlaubtesZeichen)
 		{
@@ -105,12 +105,32 @@ namespace VerlagTests
 			Buch b = new Buch(unerlaubtesZeichen, "titel");
 		}
 
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void Autor_KeineNullEingabeErlaubt()
+		{
+            // Arrange
+            string nullAutor = null;
+            string titel = "Titel";
+
+			// Act
+			Buch b = new Buch(nullAutor, titel);
+        }
+
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Autor_DarfNichtNullSein()
+        public void Buch_ISBNKannEingegebenWerden()
         {
-            //Act
-            Buch b = new Buch(null, "titel");
+            // Arrange 
+            string autor = "Autor";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-3770436149";
+
+            // Act
+            Buch c = new Buch(autor, titel, auflage, iSBN);
+
+            // Assert
+            Assert.AreEqual(iSBN, c.ISBN);
         }
     }
 }

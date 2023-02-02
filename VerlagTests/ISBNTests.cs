@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Verlag;
 
 namespace VerlagTests
@@ -11,49 +7,38 @@ namespace VerlagTests
     [TestClass]
     public class ISBNTests
     {
+
         [TestMethod]
-        public void ISBN_BuchKannMitEinerISBNErstelltWerden()
+        public void ISBN_PruefzifferWirdRichtigBerechnet()
         {
-            string titel = "TestBuch";
+            // Arrange
             string autor = "Autor";
-            int auflage = 2;
-            string isbn = "978-3770436163";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-377043614";
 
-            Buch b = new Buch(autor, titel, auflage, isbn);
+            // Act
+            Buch d = new Buch(autor, titel, auflage, iSBN);
 
-            Assert.AreEqual(b.ISBN, isbn);
+            // Assert
+            Assert.AreEqual("978-3770436149", d.ISBN);
         }
 
         [TestMethod]
-        public void ISBN_PruefzifferWirdErgaenzt()
+        public void ISBN_ISBN13inISBN10Umrechnen()
         {
-            //Arange
-            string titel = "TestBuch";
+            //Arrange 
             string autor = "Autor";
-            int auflage = 2;
-            string isbn = "978-377043614";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-3770436064";
+            Buch d = new Buch(autor, titel, auflage, iSBN);
 
-            //Act
-            Buch b = new Buch(autor, titel, auflage, isbn);
+            // Act
+            string iSBN10 = d.ISBN10;
 
-            //Assert
-            Assert.AreEqual("978-3770436149", b.ISBN);
-        }
-
-        [TestMethod]
-        public void ISBN_ISBN10KannAusgegebenWerden()
-        {
-            //Arange
-            string titel = "TestBuch";
-            string autor = "Autor";
-            int auflage = 2;
-            string isbn = "978-3770436064";
-
-            //Act
-            Buch b = new Buch(autor, titel, auflage, isbn);
-
-            //Assert
-            Assert.AreEqual("3770436067", b.ISBN10);
+            // Assert
+            Assert.AreEqual("3770436067", iSBN10);
         }
     }
 }
