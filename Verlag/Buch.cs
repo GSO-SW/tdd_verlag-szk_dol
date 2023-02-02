@@ -116,12 +116,12 @@ namespace Verlag
             {
                 string isbn10 = iSBN.Substring(4,iSBN.Length-5);
 
-                double i = 10;
+                double i = 1;
                 double summe = 0;
                 foreach (char x in isbn10)
                 {
                     summe += i * Char.GetNumericValue(x);
-                    i--;
+                    i++;
                 }
                 double pruefziffer = summe % 11;
                 if (pruefziffer == 10)
