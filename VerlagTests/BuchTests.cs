@@ -116,5 +116,21 @@ namespace VerlagTests
 			// Act
 			Buch b = new Buch(nullAutor, titel);
         }
-	}
+
+        [TestMethod]
+        public void Buch_ISBNKannEingegebenWerden()
+        {
+            // Arrange 
+            string autor = "Autor";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-3770436149";
+
+            // Act
+            Buch c = new Buch(autor, titel, auflage, iSBN);
+
+            // Assert
+            Assert.AreEqual(iSBN, c.ISBN);
+        }
+    }
 }

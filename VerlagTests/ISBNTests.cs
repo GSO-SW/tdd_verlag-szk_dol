@@ -7,21 +7,6 @@ namespace VerlagTests
     [TestClass]
     public class ISBNTests
     {
-        [TestMethod]
-        public void ISBN_KannEingegebenWerden()
-        {
-            // Arrange 
-            string autor = "Autor";
-            string titel = "Titel";
-            int auflage = 1;
-            string iSBN = "978-3770436149";
-
-            // Act
-            Buch c = new Buch(autor, titel, auflage, iSBN);
-
-            // Assert
-            Assert.AreEqual(iSBN, c.ISBN);
-        }
 
         [TestMethod]
         public void ISBN_PruefzifferWirdRichtigBerechnet()
