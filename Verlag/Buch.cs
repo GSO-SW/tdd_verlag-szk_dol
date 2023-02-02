@@ -67,10 +67,11 @@ namespace Verlag
                 this.auflage = value;
             }
         }
-        public string ISBN { get => isbn;
+        public string ISBN
+        {
+            get => isbn;
             set
             {
-
                 if (value.Length == 13)
                 {
                     char[] isbnChars = value.Remove(value.IndexOf('-'), 1).ToCharArray();
@@ -90,7 +91,7 @@ namespace Verlag
                     }
                     int ziffer = 10 - (pruefZiffer % 10);
                     if (ziffer == 10) ziffer = 0;
-                    this.isbn = isbn + $"{ziffer}";
+                    this.isbn = value + $"{ziffer}";
                     return;
                 }
                 this.isbn = value;
@@ -102,18 +103,42 @@ namespace Verlag
         {
             get
             {
-                if (isbn.Length == 14)
+                //if (isbn.Length == 14)
+                //{
+                //    char[] isbnChars = isbn.Replace('-', '\0')[..^1].ToCharArray();
+                //    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
+                //    int pruefZiffer = 0;
+                //    for (int i = 0; i < isbnZiffern.Length; i++)
+                //    {
+                //        pruefZiffer += isbnZiffern[i] * i + 1;
+                //    }
+                //    char pz = 'X';
+                //    if (pruefZiffer % 11 == 10)
+                //    {
+                //        pz = 'X';
+                //    } 
+                //    else
+                //    {
+                //        pz = char.Parse((pruefZiffer % 11).ToString());
+                //    }
+                //    return isbn.Substring(isbn.IndexOf('-') + 1)[..^1] + pz;
+                //}
+                //return "";
+
+                var split = isbn[4..^1].Where(x => char.IsDigit(x)).Select(x => int.Parse(x.ToString())).ToArray();
+
+                for (int i = 0; i < 9;)
                 {
-                    char[] isbnChars = isbn.Remove(isbn.IndexOf('-'), 1).ToCharArray();
-                    int[] isbnZiffern = Array.ConvertAll(isbnChars, c => (int)Char.GetNumericValue(c));
-                    int pruefZiffer = 0;
-                    for (int i = 0; i < isbnZiffern.Length; i++)
-                    {
-                        pruefZiffer += isbnZiffern[i] * i + 1;
-                    }
-                    this.isbn = isbn + $"{pruefZiffer % 13}";
-                    return;
+                    split[i] *= ++i;
                 }
+
+                int dings = split.Sum() % 11;
+
+                return dings switch
+                {
+                    13 => isbn[4..^1] + 'X',
+                    _ => isbn[4..^1] + dings
+                };
             }
         }
     }

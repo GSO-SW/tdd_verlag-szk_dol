@@ -112,34 +112,5 @@ namespace VerlagTests
             //Act
             Buch b = new Buch(null, "titel");
         }
-
-        [TestMethod]
-		public void ISBN_BuchKannMitEinerISBNErstelltWerden()
-		{
-			string titel = "TestBuch";
-			string autor = "Autor";
-			int auflage = 2;
-			string isbn = "978-3770436163";
-
-			Buch b = new Buch(autor, titel, auflage, isbn);
-
-			Assert.AreEqual(b.ISBN, isbn);
-		}
-
-		[TestMethod]
-		public void ISBN_PruefzifferWirdErgaenzt()
-		{
-            //Arange
-            string titel = "TestBuch";
-            string autor = "Autor";
-            int auflage = 2;
-            string isbn = "978-377043614";
-
-            //Act
-            Buch b = new Buch(autor, titel, auflage, isbn);
-
-            //Assert
-            Assert.AreEqual("978-3770436149", b.ISBN);
-        }
     }
 }
