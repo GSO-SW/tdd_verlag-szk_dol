@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Verlag
 {
@@ -14,6 +15,7 @@ namespace Verlag
         private string titel;
         private int auflage;
         private string iSBN;
+        private DateTime datum;
 
         public Buch(string autor, string titel)
         {
@@ -30,6 +32,11 @@ namespace Verlag
         public Buch (string autor, string titel, int auflage, string iSBN): this(autor, titel, auflage)
         {
             ISBN = iSBN;
+        }
+
+        public Buch(string autor, string titel, int auflage, string iSBN, string datum) : this(autor, titel, auflage, iSBN)
+        {
+            this.datum = DateTime.Parse(datum, new CultureInfo("de-DE"));
         }
 
 
@@ -132,6 +139,11 @@ namespace Verlag
 
                 return isbn10 + Convert.ToString(pruefziffer);
             }
+        }
+
+        public DateTime Datum
+        {
+            get => datum;
         }
 
     }

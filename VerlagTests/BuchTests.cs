@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Verlag;
 
@@ -131,6 +132,23 @@ namespace VerlagTests
 
             // Assert
             Assert.AreEqual(iSBN, c.ISBN);
+        }
+
+		[TestMethod]
+		public void Buch_DatumKannEingegebenWerden()
+		{
+            // Arrange 
+            string autor = "Autor";
+            string titel = "Titel";
+            int auflage = 1;
+            string iSBN = "978-3770436149";
+			string datum = "02-03-2023";
+
+            // Act
+            Buch c = new Buch(autor, titel, auflage, iSBN, datum);
+
+			// Assert
+			Assert.AreEqual(DateTime.Parse(datum, new CultureInfo("de-DE")), c.Datum);
         }
     }
 }
